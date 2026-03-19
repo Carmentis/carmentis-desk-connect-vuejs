@@ -23,33 +23,37 @@ const emit = defineEmits<{
 
 const popupBase = ref<InstanceType<typeof CarmentisPopupBase>>();
 
-onMounted(async () => {
-  if (props.visible && popupBase.value) {
-    await popupBase.value.session.createSession(props.relayUrl);
-
-    // Send authentication request
+const sendAuthRequest = () => {
+  if (popupBase.value) {
     const authRequest = {
       type: WalletRequestType.AUTH_BY_PUBLIC_KEY,
       base64EncodedChallenge: props.challenge
     };
     popupBase.value.session.sendRequest(authRequest);
   }
+};
+
+onMounted(async () => {
+  if (props.visible && popupBase.value) {
+    await popupBase.value.session.createSession(props.relayUrl, sendAuthRequest);
+  }
 });
 
-// Watch for messages and emit response
-watch(() => popupBase.value?.session.messages.value, (messages) => {
-  if (messages && messages.length > 0) {
-    const lastMessage = messages[messages.length - 1];
-    if (lastMessage.type === WalletResponseType.AUTH_BY_PUBLIC_KEY) {
-      try {
-        const validatedResponse = v.parse(WalletResponseAuthByPublicKeySchema, lastMessage);
-        emit('response', validatedResponse);
-      } catch (error) {
-        emit('error', error instanceof Error ? error : new Error('Invalid response format'));
-      }
-    }
+async function onConnected() {
+  emit("connected")
+  sendAuthRequest()
+}
+
+async function onMessage(message: any) {
+  try {
+    const validatedResponse = v.parse(WalletResponseAuthByPublicKeySchema, message);
+    console.log("Authentication response provided:", validatedResponse)
+    emit('response', validatedResponse);
+  } catch (error) {
+    emit('error', error instanceof Error ? error : new Error('Invalid response format'));
   }
-}, { deep: true });
+}
+
 </script>
 
 <template>
@@ -59,9 +63,9 @@ watch(() => popupBase.value?.session.messages.value, (messages) => {
     title="Authenticate with Carmentis Desk"
     :relay-url="relayUrl"
     @update:visible="emit('update:visible', $event)"
-    @message="emit('message', $event)"
+    @message="(event) => onMessage(event)"
     @ready="emit('ready')"
-    @connected="emit('connected')"
+    @connected="() => onConnected()"
     @disconnected="emit('disconnected')"
     @close-requested="emit('close-requested')"
   />

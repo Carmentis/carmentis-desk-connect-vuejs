@@ -61,6 +61,7 @@ const close = () => {
 
 // Track emitted states to avoid duplicate emissions
 let lastEmittedStatus: ConnectionStatus | null = null;
+let lastEmittedMessageCount = 0;
 
 // Watch connection status
 const checkConnectionStatus = () => {
@@ -80,9 +81,11 @@ const checkConnectionStatus = () => {
 
 // Watch for messages
 const checkMessages = () => {
-  if (session.messages.value.length > 0) {
-    const lastMessage = session.messages.value[session.messages.value.length - 1];
+  const messageCount = session.messages.value.length;
+  if (messageCount > lastEmittedMessageCount) {
+    const lastMessage = session.messages.value[messageCount - 1];
     emit('message', lastMessage);
+    lastEmittedMessageCount = messageCount;
   }
 };
 
@@ -131,7 +134,6 @@ defineExpose({
             @click="openDesk"
             :disabled="session.connectionStatus.value !== 'ready' && session.connectionStatus.value !== 'connected'"
             severity="primary"
-            class="open-desk-btn"
           />
         </div>
       </div>

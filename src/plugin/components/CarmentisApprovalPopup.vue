@@ -3,6 +3,7 @@ import { onMounted, ref, watch } from 'vue';
 import { WalletRequestType, type WalletResponseDataApproval, WalletResponseType, WalletResponseDataApprovalSchema } from '@cmts-dev/carmentis-sdk/client';
 import * as v from 'valibot';
 import CarmentisPopupBase from './CarmentisPopupBase.vue';
+import Button from 'primevue/button';
 
 const props = defineProps<{
   visible: boolean;
@@ -24,17 +25,20 @@ const emit = defineEmits<{
 
 const popupBase = ref<InstanceType<typeof CarmentisPopupBase>>();
 
-onMounted(async () => {
-  if (props.visible && popupBase.value) {
-    await popupBase.value.session.createSession(props.relayUrl);
-
-    // Send approval request
+const sendApprovalRequest = () => {
+  if (popupBase.value) {
     const approvalRequest = {
       type: WalletRequestType.DATA_APPROVAL,
       anchorRequestId: props.anchorRequestId,
       serverUrl: props.serverUrl
     };
     popupBase.value.session.sendRequest(approvalRequest);
+  }
+};
+
+onMounted(async () => {
+  if (props.visible && popupBase.value) {
+    await popupBase.value.session.createSession(props.relayUrl, sendApprovalRequest);
   }
 });
 

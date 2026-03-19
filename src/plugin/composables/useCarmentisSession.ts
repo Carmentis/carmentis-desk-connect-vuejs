@@ -8,7 +8,7 @@ export interface CarmentisSession {
   symKey: Ref<string>;
   connectionStatus: Ref<ConnectionStatus>;
   messages: Ref<any[]>;
-  createSession: (relayUrl: string) => Promise<void>;
+  createSession: (relayUrl: string, onSessionReadyCallback?: () => void) => Promise<void>;
   sendRequest: (request: any) => void;
   getDeepLink: () => string;
 }
@@ -21,7 +21,7 @@ export function useCarmentisSession(): CarmentisSession {
   const messages = ref<any[]>([]);
   const relayUrl = ref('');
 
-  const createSession = async (url: string) => {
+  const createSession = async (url: string, onSessionReadyCallback?: () => void) => {
     relayUrl.value = url;
     initiator.value = await Initiator.createSession(url);
 
@@ -36,6 +36,9 @@ export function useCarmentisSession(): CarmentisSession {
 
     initiator.value.onSessionReady(() => {
       connectionStatus.value = 'connected';
+      if (onSessionReadyCallback) {
+        onSessionReadyCallback();
+      }
     });
 
     initiator.value.onClose(() => {
