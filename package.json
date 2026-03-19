@@ -13,7 +13,7 @@
       "import": "./dist/carmentis-desk-connect.es.js",
       "require": "./dist/carmentis-desk-connect.umd.js"
     },
-    "./style.css": "./dist/style.css"
+    "./style.css": "./dist/carmentis-desk-connect-vuejs.css"
   },
   "files": [
     "dist"
