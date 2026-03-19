@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
-import { WalletRequestType, type WalletResponseDataApproval, WalletResponseType, WalletResponseDataApprovalSchema } from '@cmts-dev/carmentis-sdk/client';
+import { onMounted, ref } from 'vue';
+import { WalletRequestType, type WalletResponseDataApproval, WalletResponseDataApprovalSchema } from '@cmts-dev/carmentis-sdk/client';
 import * as v from 'valibot';
 import CarmentisPopupBase from './CarmentisPopupBase.vue';
-import Button from 'primevue/button';
 
 const props = defineProps<{
   visible: boolean;
@@ -42,20 +41,20 @@ onMounted(async () => {
   }
 });
 
-// Watch for messages and emit response
-watch(() => popupBase.value?.session.messages.value, (messages) => {
-  if (messages && messages.length > 0) {
-    const lastMessage = messages[messages.length - 1];
-    if (lastMessage.type === WalletResponseType.DATA_APPROVAL) {
-      try {
-        const validatedResponse = v.parse(WalletResponseDataApprovalSchema, lastMessage);
-        emit('response', validatedResponse);
-      } catch (error) {
-        emit('error', error instanceof Error ? error : new Error('Invalid response format'));
-      }
-    }
+async function onConnected() {
+  emit("connected")
+  sendApprovalRequest()
+}
+
+async function onMessage(message: any) {
+  try {
+    const validatedResponse = v.parse(WalletResponseDataApprovalSchema, message);
+    console.log("Approval response provided:", validatedResponse)
+    emit('response', validatedResponse);
+  } catch (error) {
+    emit('error', error instanceof Error ? error : new Error('Invalid response format'));
   }
-}, { deep: true });
+}
 </script>
 
 <template>
@@ -65,9 +64,9 @@ watch(() => popupBase.value?.session.messages.value, (messages) => {
     title="Approve Event"
     :relay-url="relayUrl"
     @update:visible="emit('update:visible', $event)"
-    @message="emit('message', $event)"
+    @message="(event) => onMessage(event)"
     @ready="emit('ready')"
-    @connected="emit('connected')"
+    @connected="() => onConnected()"
     @disconnected="emit('disconnected')"
     @close-requested="emit('close-requested')"
   >

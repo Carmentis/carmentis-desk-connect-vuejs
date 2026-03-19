@@ -6,6 +6,7 @@
   "main": "./dist/carmentis-desk-connect.umd.js",
   "module": "./dist/carmentis-desk-connect.es.js",
   "types": "./dist/index.d.ts",
+  "license": "Apache-2.0",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -31,11 +32,14 @@
     "vue": "^3.5.29"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@tsconfig/node24": "^24.0.4",
     "@types/node": "^24.11.0",
     "@vitejs/plugin-vue": "^6.0.4",
     "@vue/tsconfig": "^0.8.1",
     "npm-run-all2": "^8.0.4",
+    "semantic-release": "^24.2.0",
     "typescript": "~5.9.3",
     "vite": "^7.3.1",
     "vite-plugin-vue-devtools": "^8.0.6",
@@ -43,5 +47,12 @@
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/carmentis/carmentis-desk-connect-vuejs.git"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
