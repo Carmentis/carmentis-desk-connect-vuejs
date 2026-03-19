@@ -1,14 +1,17 @@
 import type { App, Plugin } from 'vue';
-import CarmentisConnectPopup from './components/CarmentisConnectPopup.vue';
+import CarmentisAuthPopup from './components/CarmentisAuthPopup.vue';
+import CarmentisApprovalPopup from './components/CarmentisApprovalPopup.vue';
+import CarmentisPopupBase from './components/CarmentisPopupBase.vue';
 import type { CarmentisPluginOptions } from './types';
 
-export { CarmentisConnectPopup };
+export { CarmentisAuthPopup, CarmentisApprovalPopup, CarmentisPopupBase };
 export * from './types';
 export * from './composables/useCarmentisSession';
 
 const CarmentisConnectPlugin: Plugin = {
   install(app: App, options?: CarmentisPluginOptions) {
-    app.component('CarmentisConnectPopup', CarmentisConnectPopup);
+    app.component('CarmentisAuthPopup', CarmentisAuthPopup);
+    app.component('CarmentisApprovalPopup', CarmentisApprovalPopup);
 
     // Optionally store global options
     if (options) {

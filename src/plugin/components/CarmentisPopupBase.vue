@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { onMounted, computed } from 'vue';
-import { WalletRequestType } from '@cmts-dev/carmentis-sdk/client';
+import { computed } from 'vue';
 import { useCarmentisSession } from '../composables/useCarmentisSession';
-import type { CarmentisPopupOptions, ConnectionStatus } from '../types';
+import type { ConnectionStatus } from '../types';
 import Button from 'primevue/button';
 
 const props = defineProps<{
-  options: CarmentisPopupOptions;
   visible: boolean;
+  title: string;
+  relayUrl: string;
 }>();
 
 const emit = defineEmits<{
@@ -16,15 +16,10 @@ const emit = defineEmits<{
   'ready': [];
   'connected': [];
   'disconnected': [];
+  'close-requested': [];
 }>();
 
 const session = useCarmentisSession();
-
-const title = computed(() => {
-  return props.options.requestType === WalletRequestType.AUTH_BY_PUBLIC_KEY
-    ? 'Authenticate with Carmentis Desk'
-    : 'Approve Event';
-});
 
 const statusText = computed(() => {
   switch (session.connectionStatus.value) {
@@ -60,31 +55,8 @@ const openDesk = () => {
 };
 
 const close = () => {
+  emit('close-requested');
   emit('update:visible', false);
-};
-
-onMounted(async () => {
-  if (props.visible) {
-    await session.createSession(props.options.relayUrl);
-
-    // Send the request based on type
-    if (props.options.requestData) {
-      session.sendRequest(props.options.requestData);
-    }
-  }
-});
-
-// Watch for messages
-const unwatchMessages = () => {
-  return session.messages;
-};
-
-// Emit events
-const checkMessages = () => {
-  if (session.messages.value.length > 0) {
-    const lastMessage = session.messages.value[session.messages.value.length - 1];
-    emit('message', lastMessage);
-  }
 };
 
 // Track emitted states to avoid duplicate emissions
@@ -106,11 +78,23 @@ const checkConnectionStatus = () => {
   }
 };
 
+// Watch for messages
+const checkMessages = () => {
+  if (session.messages.value.length > 0) {
+    const lastMessage = session.messages.value[session.messages.value.length - 1];
+    emit('message', lastMessage);
+  }
+};
+
 // Simple watchers
 setInterval(() => {
   checkMessages();
   checkConnectionStatus();
 }, 100);
+
+defineExpose({
+  session
+});
 </script>
 
 <template>
@@ -138,6 +122,8 @@ setInterval(() => {
             Connection closed.
           </p>
         </div>
+
+        <slot name="extra-content"></slot>
 
         <div class="action-section">
           <Button
