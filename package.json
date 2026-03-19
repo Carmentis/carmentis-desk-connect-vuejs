@@ -1,0 +1,46 @@
+{
+  "name": "@cmts-dev/carmentis-desk-connect-vuejs",
+  "version": "0.0.1",
+  "private": false,
+  "type": "module",
+  "main": "./dist/carmentis-desk-connect.umd.js",
+  "module": "./dist/carmentis-desk-connect.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/carmentis-desk-connect.es.js",
+      "require": "./dist/carmentis-desk-connect.umd.js"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && vue-tsc --project tsconfig.build.json",
+    "preview": "vite preview",
+    "type-check": "vue-tsc --build"
+  },
+  "dependencies": {
+    "@cmts-dev/carmentis-relay-client": "^1.2.0",
+    "@cmts-dev/carmentis-sdk": "^1.20.1",
+    "primevue": "^4.5.4",
+    "vue": "^3.5.29"
+  },
+  "devDependencies": {
+    "@tsconfig/node24": "^24.0.4",
+    "@types/node": "^24.11.0",
+    "@vitejs/plugin-vue": "^6.0.4",
+    "@vue/tsconfig": "^0.8.1",
+    "npm-run-all2": "^8.0.4",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.1",
+    "vite-plugin-vue-devtools": "^8.0.6",
+    "vue-tsc": "^3.2.5"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
+}
