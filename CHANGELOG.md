@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/carmentis/carmentis-desk-connect-vuejs/compare/v1.0.1...v1.1.0) (2026-03-26)
+
+
+### Features
+
+* carmentis generic json rpc popup ([c54b522](https://github.com/carmentis/carmentis-desk-connect-vuejs/commit/c54b522a8472281c32ae2ffbc2372ce12b106807))
+
 ## [1.0.1](https://github.com/carmentis/carmentis-desk-connect-vuejs/compare/v1.0.0...v1.0.1) (2026-03-19)
 
 
