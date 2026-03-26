@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { WalletRequestType, type WalletResponseDataApproval, WalletResponseDataApprovalSchema } from '@cmts-dev/carmentis-sdk/client';
-import * as v from 'valibot';
+import { JsonRpc, type JsonRpcRequest, type JsonRpcSuccessResponse } from '@cmts-dev/carmentis-sdk-json-rpc';
 import CarmentisPopupBase from './CarmentisPopupBase.vue';
 
 const props = defineProps<{
@@ -18,7 +17,7 @@ const emit = defineEmits<{
   'connected': [];
   'disconnected': [];
   'close-requested': [];
-  'response': [response: WalletResponseDataApproval];
+  'response': [response: JsonRpcSuccessResponse];
   'error': [error: Error];
 }>();
 
@@ -26,10 +25,14 @@ const popupBase = ref<InstanceType<typeof CarmentisPopupBase>>();
 
 const sendApprovalRequest = () => {
   if (popupBase.value) {
-    const approvalRequest = {
-      type: WalletRequestType.DATA_APPROVAL,
-      anchorRequestId: props.anchorRequestId,
-      serverUrl: props.serverUrl
+    const approvalRequest: JsonRpcRequest = {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'wr-data-approval',
+      params: {
+        anchorRequestId: props.anchorRequestId,
+        serverUrl: props.serverUrl
+      }
     };
     popupBase.value.session.sendRequest(approvalRequest);
   }
@@ -47,12 +50,13 @@ async function onConnected() {
 }
 
 async function onMessage(message: any) {
-  try {
-    const validatedResponse = v.parse(WalletResponseDataApprovalSchema, message);
-    console.log("Approval response provided:", validatedResponse)
-    emit('response', validatedResponse);
-  } catch (error) {
-    emit('error', error instanceof Error ? error : new Error('Invalid response format'));
+  if (JsonRpc.isSuccessResponse(message)) {
+    console.log("Approval response provided:", message)
+    emit('response', message);
+  } else if (JsonRpc.isErrorResponse(message)) {
+    emit('error', new Error(`JSON-RPC error ${message.error.code}: ${message.error.message}`));
+  } else {
+    emit('error', new Error('Invalid response format'));
   }
 }
 </script>

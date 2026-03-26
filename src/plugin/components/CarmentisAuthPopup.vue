@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
-import { WalletRequestType, type WalletResponseAuthByPublicKey, WalletResponseType, WalletResponseAuthByPublicKeySchema } from '@cmts-dev/carmentis-sdk/client';
-import * as v from 'valibot';
+import { onMounted, ref } from 'vue';
+import { JsonRpc, type JsonRpcRequest, type JsonRpcSuccessResponse } from '@cmts-dev/carmentis-sdk-json-rpc';
 import CarmentisPopupBase from './CarmentisPopupBase.vue';
 
 const props = defineProps<{
@@ -17,7 +16,7 @@ const emit = defineEmits<{
   'connected': [];
   'disconnected': [];
   'close-requested': [];
-  'response': [response: WalletResponseAuthByPublicKey];
+  'response': [response: JsonRpcSuccessResponse];
   'error': [error: Error];
 }>();
 
@@ -25,9 +24,13 @@ const popupBase = ref<InstanceType<typeof CarmentisPopupBase>>();
 
 const sendAuthRequest = () => {
   if (popupBase.value) {
-    const authRequest = {
-      type: WalletRequestType.AUTH_BY_PUBLIC_KEY,
-      base64EncodedChallenge: props.challenge
+    const authRequest: JsonRpcRequest = {
+      jsonrpc: '2.0',
+      id: 1,
+      method: 'wr-auth-pk',
+      params: {
+        base64EncodedChallenge: props.challenge
+      }
     };
     popupBase.value.session.sendRequest(authRequest);
   }
@@ -45,12 +48,13 @@ async function onConnected() {
 }
 
 async function onMessage(message: any) {
-  try {
-    const validatedResponse = v.parse(WalletResponseAuthByPublicKeySchema, message);
-    console.log("Authentication response provided:", validatedResponse)
-    emit('response', validatedResponse);
-  } catch (error) {
-    emit('error', error instanceof Error ? error : new Error('Invalid response format'));
+  if (JsonRpc.isSuccessResponse(message)) {
+    console.log("Authentication response provided:", message)
+    emit('response', message);
+  } else if (JsonRpc.isErrorResponse(message)) {
+    emit('error', new Error(`JSON-RPC error ${message.error.code}: ${message.error.message}`));
+  } else {
+    emit('error', new Error('Invalid response format'));
   }
 }
 

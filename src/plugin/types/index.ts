@@ -1,10 +1,8 @@
-import type { WalletRequestType } from '@cmts-dev/carmentis-sdk/client';
-
 export type ConnectionStatus = 'unset' | 'ready' | 'connected' | 'disconnected';
 
 export interface CarmentisPopupOptions {
   relayUrl: string;
-  requestType: WalletRequestType.AUTH_BY_PUBLIC_KEY | WalletRequestType.DATA_APPROVAL;
+  requestType: 'WALLET_REQUEST_AUTH_BY_PUBLIC_KEY' | 'WALLET_REQUEST_DATA_APPROVAL';
   requestData?: any;
 }
 
