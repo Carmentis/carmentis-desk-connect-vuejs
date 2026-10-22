@@ -1,3 +1,17 @@
+# [1.2.0](https://github.com/carmentis/carmentis-desk-connect-vuejs/compare/v1.1.0...v1.2.0) (2026-10-22)
+
+
+### Bug Fixes
+
+* outdated packages ([500c73f](https://github.com/carmentis/carmentis-desk-connect-vuejs/commit/500c73f493d759f2bf4333b0aa27b0c5b6cbf521))
+* outdated pnpm lock and missing workspace ([adcb3c3](https://github.com/carmentis/carmentis-desk-connect-vuejs/commit/adcb3c3dd0d6d9a00369bfe33cc26412dd9f6f0c))
+* remove old lock file ([84af5a3](https://github.com/carmentis/carmentis-desk-connect-vuejs/commit/84af5a38490d109b44d19fabfc6e5d46339dfeff))
+
+
+### Features
+
+* introduce Carmentis design system with SVG logo, SCSS styles, add QRCode and package dependency updates ([37815fb](https://github.com/carmentis/carmentis-desk-connect-vuejs/commit/37815fb6eed696e3f9e8ef455ebc44bf1774ef40))
+
 # [1.1.0](https://github.com/carmentis/carmentis-desk-connect-vuejs/compare/v1.0.1...v1.1.0) (2026-03-26)
 
 
