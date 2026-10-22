@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/Carmentis/carmentis-desk-connect-vuejs/compare/v1.2.0...v1.2.1) (2026-10-22)
+
+
+### Bug Fixes
+
+* update document title in index.html ([4e5b11f](https://github.com/Carmentis/carmentis-desk-connect-vuejs/commit/4e5b11fb9728c45b2bf9a1ea891fbf7d31d9c592))
+
 # [1.2.0](https://github.com/carmentis/carmentis-desk-connect-vuejs/compare/v1.1.0...v1.2.0) (2026-10-22)
 
 
