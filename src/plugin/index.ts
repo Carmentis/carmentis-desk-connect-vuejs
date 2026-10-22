@@ -4,6 +4,7 @@ import CarmentisApprovalPopup from './components/CarmentisApprovalPopup.vue';
 import CarmentisPopupBase from './components/CarmentisPopupBase.vue';
 import CarmentisJsonRpcPopup from './components/CarmentisJsonRpcPopup.vue';
 import type { CarmentisPluginOptions } from './types';
+import '../assets/main.scss';
 
 export { CarmentisAuthPopup, CarmentisApprovalPopup, CarmentisPopupBase, CarmentisJsonRpcPopup };
 export * from './types';

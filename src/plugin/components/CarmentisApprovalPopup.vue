@@ -8,6 +8,7 @@ const props = defineProps<{
   relayUrl: string;
   anchorRequestId: string;
   serverUrl: string;
+  showTechnicalDetails?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -67,6 +68,7 @@ async function onMessage(message: any) {
     :visible="visible"
     title="Approve Event"
     :relay-url="relayUrl"
+    :show-technical-details="showTechnicalDetails"
     @update:visible="emit('update:visible', $event)"
     @message="(event) => onMessage(event)"
     @ready="emit('ready')"
@@ -90,41 +92,4 @@ async function onMessage(message: any) {
   </CarmentisPopupBase>
 </template>
 
-<style scoped>
-.event-info {
-  margin-bottom: 24px;
-  padding: 16px;
-  background: #f9f9f9;
-  border-radius: 8px;
-}
-
-.event-info h3 {
-  margin: 0 0 12px 0;
-  font-size: 14px;
-  font-weight: 600;
-  color: #1a1a1a;
-}
-
-.info-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-bottom: 12px;
-}
-
-.info-item:last-child {
-  margin-bottom: 0;
-}
-
-.info-item .label {
-  font-size: 12px;
-  font-weight: 500;
-  color: #6b7280;
-}
-
-.info-item .value {
-  font-size: 13px;
-  color: #1a1a1a;
-  word-break: break-all;
-}
-</style>
+<!-- Styles are defined in src/assets/main.scss -->

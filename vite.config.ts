@@ -20,7 +20,9 @@ export default defineConfig({
           'primevue': 'PrimeVue'
         },
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name === 'style.css') return 'style.css';
+          if (assetInfo.name && assetInfo.name.endsWith('.css')) {
+            return 'carmentis-desk-connect-vuejs.css';
+          }
           return assetInfo.name || 'asset';
         }
       }
