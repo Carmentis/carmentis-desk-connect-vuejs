@@ -55,7 +55,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/carmentis/carmentis-desk-connect-vuejs.git"
+    "url": "git+https://github.com/Carmentis/carmentis-desk-connect-vuejs.git"
   },
   "publishConfig": {
     "access": "public"
