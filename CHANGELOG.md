@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/Carmentis/carmentis-desk-connect-vuejs/compare/v1.2.1...v1.3.0) (2026-10-22)
+
+
+### Features
+
+* refine styles for transitions, accessibility, and design consistency ([9a0ee75](https://github.com/Carmentis/carmentis-desk-connect-vuejs/commit/9a0ee75d1899cd1a73c8d93dd2cfb648971ed979))
+
 ## [1.2.1](https://github.com/Carmentis/carmentis-desk-connect-vuejs/compare/v1.2.0...v1.2.1) (2026-10-22)
 
 
